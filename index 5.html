@@ -1,0 +1,255 @@
+<!--
+CandyCrush
+你的名字：
+合作者：
+-->
+<!DOCTYPE html>
+<html>
+  <!--
+/*版权所有（c）2017 MIT 6.813/6.831课程工作人员，保留所有权利。
+*重新分发原创或衍生作品需要获得工作人员的许可。
+*/
+-->
+
+  <head>
+    <meta charset="utf-8" />
+    <title>CandyCrush</title>
+
+    <!-- Load style sheets -->
+    <link rel="stylesheet" href="./css/bootstrap.css" />
+
+    <link rel="stylesheet" href="./css/mainLayout.css" />
+
+    <!-- Use mobile-aware viewport -->
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <!-- Load any supplemental Javascript libraries here -->
+    <script src="./js/jquery.min.js"></script>
+    <script src="./js/seedrandom.min.js"></script>
+
+    <script src="./js/candy.js"></script>
+    <script src="./js/board.js"></script>
+    <script src="./js/rules.js"></script>
+
+    <script>
+      // By default, the first board loaded by your page will be the same
+      // each time you load (which is accomplished by "seeding" the random
+      // number generator. This makes testing (and grading!) easier!
+      Math.seedrandom(0);
+
+      // A short jQuery extension to read query parameters from the URL.
+      $.extend({
+        getUrlVars: function () {
+          var vars = [],
+            pair;
+          var pairs = window.location.search.substr(1).split("&");
+          for (var i = 0; i < pairs.length; i++) {
+            pair = pairs[i].split("=");
+            vars.push(pair[0]);
+            vars[pair[0]] =
+              pair[1] && decodeURIComponent(pair[1].replace(/\+/g, " "));
+          }
+          return vars;
+        },
+        getUrlVar: function (name) {
+          return $.getUrlVars()[name];
+        },
+      });
+
+      // constants
+      var DEFAULT_BOARD_SIZE = 8;
+
+      // data model at global scope for easier debugging
+      var board;
+      var rules;
+      var ifgood;
+      // initialize board
+      if ($.getUrlVar("size") && $.getUrlVar("size") >= 3) {
+        board = new Board($.getUrlVar("size"));
+      } else {
+        board = new Board(DEFAULT_BOARD_SIZE);
+      }
+
+      // load a rule
+      rules = new Rules(board);
+
+      // Final initialization entry point: the Javascript code inside this block
+      // runs at the end of start-up when the page has finished loading.
+
+      //创造游戏板
+      function createNewGameBoard() {
+        board.clear();
+        let table = document.getElementById("gameBoard");
+        table.innerHTML = "";
+        rules.prepareNewGame();
+        for (var i = 0; i < DEFAULT_BOARD_SIZE; i++) {
+          let tr = document.createElement("tr");
+          for (var j = 0; j < DEFAULT_BOARD_SIZE; j++) {
+            let td = document.createElement("td");
+            td.innerText = String.fromCharCode("a".charCodeAt(0) + j) + (i + 1);
+            td.style.backgroundColor = board.square[i][j].color;
+            if (board.square[i][j].color !== "yellow") {
+              td.style.color = "white";
+            } else {
+              td.style.color = "black";
+            }
+
+            tr.appendChild(td);
+          }
+          table.appendChild(tr);
+        }
+      }
+      //移动是否有效
+      function moveIf(direction) {
+        var candyInput = document.getElementById("movetext");
+        //测试输入
+        // if (/^[a-z]\d$/.test(candyInput.value)) {
+        //   document.getElementById("up").disabled = false;
+        //   document.getElementById("left").disabled = false;
+        //   document.getElementById("right").disabled = false;
+        //   document.getElementById("down").disabled = false;
+        // } else {
+        //   document.getElementById("up").disabled = true;
+        //   document.getElementById("left").disabled = true;
+        //   document.getElementById("right").disabled = true;
+        //   document.getElementById("down").disabled = true;
+        // }
+        //移动
+        var row = candyInput.value[1] - 1;
+        var col_list = ["a", "b", "c", "d", "e", "f", "g", "h"];
+        var col = col_list.indexOf(candyInput.value[0]);
+        var fromCandy = board.square[row][col];
+        board.flipCandies(
+          fromCandy,
+          board.getCandyInDirection(fromCandy, direction)
+        );
+        candyInput.value = "";
+        candyInput.focus();
+      }
+
+      function inputTest() {
+        var candyInput = document.getElementById("movetext");
+
+        
+      }
+      //初始化游戏板
+      $(document).ready(function () {
+        createNewGameBoard();
+      });
+
+      /* Event Handlers */
+      // access the candy object with info.candy
+
+      // add a candy to the board
+      $(board).on("add", function (e, info) {
+        // Your code here.
+      });
+
+      // move a candy on the board
+      $(board).on("move", function (e, info) {
+        var gameBoard = document.getElementById("gameBoard");
+        var row = info.toRow;
+        var col = info.toCol;
+        var trList = gameBoard.children;
+        var cell = trList[row].children[col];
+        cell.style.backgroundColor = info.candy.color;
+      });
+
+      // remove a candy from the board
+      $(board).on("remove", function (e, info) {
+        // Your code here.
+      });
+
+      // move a candy on the board
+      $(board).on("scoreUpdate", function (e, info) {
+        // Your code here. To be implemented in pset 2.
+      });
+
+      //点击newgame开始新游戏
+      $(document).on("click", "#newGame", function () {
+        createNewGameBoard();
+      });
+
+      $(document).on("click", "#crushOnce", function () {});
+
+      // keyboard events arrive here
+      $(document).on("keydown", function (evt) {
+        // Your code here.
+      });
+    </script>
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-3" id="firstColumn">
+          <div>
+            <!-- Column 1 Code Here -->
+            <p id="candyCrush" class="title" align="center">
+              <b>Candy</b><br />
+              <b>Crush</b>
+            </p>
+            <center>
+              <input id="newGame" class="btn" type="button" value="New Game" />
+            </center>
+          </div>
+        </div>
+
+        <div class="col-md-6" id="mainColumn">
+          <!-- Column 2 Code Here -->
+
+          <table id="gameBoard" border="1" width="320" height="320"></table>
+        </div>
+
+        <div class="col-md-3" id="lastColumn">
+          <!-- Column 3 Code Here -->
+
+          <label id="move" class="MOVE" for="weizhi"><b>Move:</b></label>
+          <input
+            class="Text"
+            type="text"
+            size="2"
+            maxlength="2"
+            id="movetext"
+          /><br />
+          <input
+            id="up"
+            class="btn"
+            type="button"
+            value="↑"
+            onclick="moveIf('up')"
+          /><br />
+          <input
+            id="left"
+            class="btn"
+            type="button"
+            value="←"
+            align="left"
+            onclick="moveIf('left')"
+          />
+          <input
+            id="right"
+            class="btn"
+            type="button"
+            value="→"
+            onclick="moveIf('right')"
+            align="right"
+          /><br />
+          <input
+            id="down"
+            class="btn"
+            type="button"
+            value="↓"
+            onclick="moveIf('down')"
+          /><br />
+          <input id="crushOnce" class="btn" type="button" value="Crush Once" />
+        </div>
+      </div>
+      <!-- class="row" -->
+    </div>
+    <!-- class="container" -->
+  </body>
+</html>

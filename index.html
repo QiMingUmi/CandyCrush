@@ -1,0 +1,500 @@
+<!--
+CandyCrush
+你的名字：
+合作者：
+-->
+<!DOCTYPE html>
+<html>
+<!--
+/*版权所有（c）2017 MIT 6.813/6.831课程工作人员，保留所有权利。
+*重新分发原创或衍生作品需要获得工作人员的许可。
+*/
+-->
+
+<head>
+<meta charset="utf-8">
+<title>CandyCrush</title>
+
+		<!-- Load style sheets -->
+<link rel="stylesheet" href="./css/bootstrap.css">
+
+<link rel="stylesheet" href="./css/mainLayout.css">
+
+		<!-- Use mobile-aware viewport -->
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+		<!-- Load any supplemental Javascript libraries here -->
+<script src="./js/jquery.min.js"></script>
+<script src="./js/seedrandom.min.js"></script>
+
+
+<script src="./js/candy.js"></script>
+<script src="./js/board.js"></script>
+<script src="./js/rules.js"></script>
+
+<script>
+
+// By default, the first board loaded by your page will be the same 
+// each time you load (which is accomplished by "seeding" the random
+// number generator. This makes testing (and grading!) easier!
+Math.seedrandom(0);
+
+
+// A short jQuery extension to read query parameters from the URL.
+$.extend({
+  getUrlVars: function() {
+    var vars = [], pair;
+    var pairs = window.location.search.substr(1).split('&');
+    for (var i = 0; i < pairs.length; i++) {
+      pair = pairs[i].split('=');
+      vars.push(pair[0]);
+      vars[pair[0]] = pair[1] &&
+          decodeURIComponent(pair[1].replace(/\+/g, ' '));
+    }
+    return vars;
+  },
+  getUrlVar: function(name) {
+    return $.getUrlVars()[name];
+  }
+});
+
+// constants
+var DEFAULT_BOARD_SIZE = 8;
+
+// data model at global scope for easier debugging
+var board;
+var rules;
+
+// initialize board
+if ($.getUrlVar('size') && $.getUrlVar('size') >= 3) {
+  board = new Board($.getUrlVar('size'));
+} else {
+  board = new Board(DEFAULT_BOARD_SIZE);
+}
+
+// load a rule
+rules = new Rules(board);
+
+//生成0到6之间的随机数
+// function generateRandomNumber(){
+//   var randomNumber = math.floor(Math.random() * 7);
+//   return randomNumber;
+// }
+
+// Final initialization entry point: the Javascript code inside this block
+// runs at the end of start-up when the page has finished loading.
+
+//启动时创建表格
+$(document).ready(function()
+{
+  // Your code here.
+  // rules.prepareNewGame()
+  creatNewTable()
+});
+
+// function updateCell(acell, candy) {
+//   acell.style.backgroundColor = candy.color;
+//   if (candy.color == "yellow") { acell.style.color = "gray" } else { acell.style.color = "white" }
+//   acell.id = candy.id;
+//   candy_location.set(acell.innerHTML, candy);
+//
+// }
+
+function creatNewTable() {
+  board.clear()
+  rules.prepareNewGame()
+
+  let table = document.getElementById("myTable");
+
+  for(var i = 0;i < DEFAULT_BOARD_SIZE;i++){
+    let tr = document.createElement('tr')
+    tr.setAttribute("index",i);
+    //var row = table.insertRow(-1);//插入新行，-1表示最后插入
+    for(var j = 0;j < DEFAULT_BOARD_SIZE;j++){
+      let td = document.createElement('td')
+      td.setAttribute("index",i);
+      var num = i + 1;
+      td.innerText = String.fromCharCode('a'.charCodeAt(0) + j) + num;//设置单元格的内容和编号
+      td.style.backgroundColor = board.square[i][j].color;//设置单元格背景颜色
+      //设置文字颜色
+      if(board.square[i][j].color !== 'yellow'){
+        td.style.color = 'white';
+      }
+      else{
+        td.style.color = 'grey';
+      }
+      tr.appendChild(td);
+      //var cell = row.insertCell(-1);//插入新单元格，-1表示最后插入
+      //cell.innerText = String.fromCharCode('a'.charCodeAt(0) + j - 1) + i;//设置单元格的内容和编号
+    }
+    table.appendChild(tr);
+    // 添加表格标题
+    let caption = document.createElement('caption');
+    caption.innerText = "图1 - 使用标准HTML元素的简单消消乐UI";
+  }
+
+}
+
+
+function creatNewTable2() {
+
+
+  let table = document.getElementById("myTable");
+  // 添加表格标题
+
+  for(var i = 0;i < DEFAULT_BOARD_SIZE;i++){
+    let tr = document.createElement('tr')
+    tr.setAttribute("index",i);
+    //var row = table.insertRow(-1);//插入新行，-1表示最后插入
+    for(var j = 0;j < DEFAULT_BOARD_SIZE;j++){
+      let td = document.createElement('td')
+      td.setAttribute("index",i);
+      var num = i + 1;
+      td.innerText = String.fromCharCode('a'.charCodeAt(0) + j) + num;//设置单元格的内容和编号
+      td.style.backgroundColor = board.square[i][j].color;
+      if(board.square[i][j].color !== 'yellow'){
+        td.style.color = 'white';
+      }
+      else{
+        td.style.color = 'grey';
+      }
+      tr.appendChild(td);
+      //var cell = row.insertCell(-1);//插入新单元格，-1表示最后插入
+      //cell.innerText = String.fromCharCode('a'.charCodeAt(0) + j - 1) + i;//设置单元格的内容和编号
+    }
+
+    table.appendChild(tr);
+    let caption = document.createElement('caption');
+    caption.innerText = "图1 - 使用标准HTML元素的简单消消乐UI";
+  }
+
+}
+
+//按钮可用
+function valid() {
+  var input = $("#weizhi").val();
+  var candyInput = document.getElementById("weizhi")
+  var fromRow = parseInt(input[1]) - 1;
+  var fromCol = input.charCodeAt(0) - 97;
+  var fromCandy2 = board.getCandyAt(fromRow,fromCol);
+
+  console.log("我改变了");
+  var buttonup = document.getElementById("Up")
+  var buttonleft = document.getElementById("Left")
+  var buttonright = document.getElementById("Right")
+  var buttondown = document.getElementById("Down")
+
+  if (rules.isMoveTypeValid(fromCandy2, "up")) {
+    buttonup.disabled = false;
+
+    buttonup.style.backgroundColor = 'green';
+  } else {
+    buttonup.disabled = true;
+  }
+  if (rules.isMoveTypeValid(fromCandy2, "left")) {
+    buttonleft.disabled = false;
+    buttonleft.style.backgroundColor = 'green';
+  } else {
+    buttonleft.disabled = true;
+  }
+  if (rules.isMoveTypeValid(fromCandy2, "right")) {
+    buttonright.disabled = false;
+    buttonright.style.backgroundColor = 'green';
+  } else {
+    buttonright.disabled = true;
+  }
+  if (rules.isMoveTypeValid(fromCandy2, "down")) {
+    buttondown.disabled = false;
+    buttondown.style.backgroundColor = 'green';
+  } else {
+    buttondown.disabled = true;
+  }
+
+}
+
+
+// 移动糖果
+// function moveCandy(direction) {
+// // 获取输入内容并获取输入位置的糖果
+// var input = $("#weizhi").val();
+// var candyInput = document.getElementById("weizhi")
+// var fromRow = parseInt(input[1]) - 1;
+// var fromCol = input.charCodeAt(0) - 97;
+// var fromCandy2 = board.getCandyAt(fromRow,fromCol);
+// // 获取指定方向的糖果
+// var Candy2 = board.getCandyInDirection(fromCandy2,direction);
+// var fromRow2 = Candy2.row;   var fromCol2 = Candy2.col;
+// // 检测移动是否超出范围
+//   if(fromRow2 >= 0 &&
+// fromRow2 <DEFAULT_BOARD_SIZE &&
+// fromCol2 >= 0 &&
+// fromCol2 < DEFAULT_BOARD_SIZE){
+// // 根据规则移动糖果
+// if(rules.isMoveTypeValid(fromCandy2,direction)){
+// board.flipCandies(fromCandy2,Candy2);
+// console.log(Candy2);     }
+// else{
+// console.warn("Invalid move");
+// }
+// }
+// else{
+// console.warn("Move out of bounds");
+// }
+// // 聚焦文本框
+// document.getElementById('weizhi').value = "";
+// document.getElementById('weizhi').focus();
+// }
+
+/* Event Handlers */
+// access the candy object with info.candy
+
+
+// add a candy to the board
+$(board).on('add', function(e, info)
+{
+  // Your code here.
+  // let table = document.getElementById("myTable");
+  // var candy = info.candy;
+  // console.log(candy.row)
+  // console.log(candy.col)
+  // // console.log(candy.info.color)
+  // // var trList = table.children;
+  // var cell = trList[i].children[j];
+  // var cell = table.rows[candy.row].cols[candy.col];
+  // cell.style.backgroundColor = candy.color;
+  // creatNewTable2();
+  // let acell = aboard.rows[info.candy.row].cells[info.candy.col];
+  // updateCell(acell, info.candy);
+
+});
+
+
+// 移动糖果
+function moveCandy(direction) {
+  //获取输入内容并获取输入位置的糖果
+  var input = $("#weizhi").val();
+  var candyInput = document.getElementById("weizhi")
+  var fromRow = parseInt(input[1]) - 1;
+  var fromCol = input.charCodeAt(0) - 97;
+  var fromCandy2 = board.getCandyAt(fromRow,fromCol);
+  // console.log("1号：" + fromCandy2);
+  // console.log("方向：" + direction);
+  //获取指定方向的糖果
+  // var fromCandy2 = board.square[fromRow][fromCol];
+  var Candy2 = board.getCandyInDirection(fromCandy2,direction);
+  // console.log("2号：" + Candy2);
+  var fromRow2 = Candy2.row;
+  var fromCol2 = Candy2.col;
+  //检测移动是否超出范围
+  if(fromRow2 >= 0 &&
+          fromRow2 <DEFAULT_BOARD_SIZE &&
+          fromCol2 >= 0 &&
+          fromCol2 < DEFAULT_BOARD_SIZE){
+    // 根据规则移动糖果
+    if(rules.isMoveTypeValid(fromCandy2,direction)){
+      board.flipCandies(fromCandy2,Candy2);
+      console.log(Candy2);
+    }
+    else{
+      console.warn("Invalid move");
+    }
+  }else{
+    console.warn("Move out of bounds");
+  }
+  // console.log("1号行：" + fromRow);
+  // console.log("1号列" + fromCol);
+  // console.log("2号行" + fromRow2);
+  // console.log("2号列" + fromCol2);
+  //聚焦文本框
+  document.getElementById('weizhi').value = "";
+  document.getElementById('weizhi').focus();
+
+
+  // let upmove =  document.getElementById("Up")
+  // let leftmove =  document.getElementById("Left")
+  // let rightmove =  document.getElementById("Right")
+  // let downmove =  document.getElementById("Down")
+
+
+}
+
+// setInterval(function ()){
+//
+// }
+
+// function valid(){
+//   if(rules.isMoveTypeValid(fromCandy2,'up')){
+//
+//   }
+// }
+//
+
+
+// 在board上移动一个糖果
+$(board).on('move', function(e, info)
+{
+  // Your code here.
+  //获取表格
+  let table = document.getElementById("myTable");
+  // 获得输入的糖果的行和列
+    var i = info.toRow;
+    var m = info.toRow;
+    var j = info.toCol;
+    var trList = table.children;
+    var tableTd = trList[i].children[j];
+    var color = info.candy.color;
+    // console.log(i);
+    // console.log(j);
+    // console.log(color);
+    tableTd.style.backgroundColor = info.candy.color;//染色
+    //调整单元格内文字的颜色
+    if(board.square[m][j].color !== 'yellow'){
+      tableTd.style.color = 'white'
+    }
+    else{
+      tableTd.style.color = 'grey'
+    }
+
+});
+
+
+// remove a candy from the board
+//消除糖果
+$(board).on('remove', function(e, info)
+{
+  // Your code here.
+  // var candy = info.candy;
+  // var cell = table.rows[candy.row].cells[candy.col];
+  // cell.style.backgroundColor = '#FFFFFF'; // 或其他背景颜色
+});
+
+// move a candy on the board
+//移动糖果
+$(board).on('scoreUpdate', function(e, info)
+{
+  // Your code here. To be implemented in pset 2.
+
+  // var score = info.score;
+  // document.getElementById('score').innerText = score;
+});
+
+// Button Events按钮事件
+$(document).on('click', "#btn", function(evt)
+{
+  // Your code here.
+  // location.reload();
+
+  // 获取 table 元素
+  let table = document.getElementById("myTable");
+
+  // 清除 table 中的所有内容
+  while (table.firstChild) {
+    table.removeChild(table.firstChild)
+  }
+  creatNewTable()
+});
+
+$(document).on('click', "#Crush", function(evt)
+{
+
+  var buttonup = document.getElementById("Up")
+  var buttonleft = document.getElementById("Left")
+  var buttonright = document.getElementById("Right")
+  var buttondown = document.getElementById("Down")
+  buttonup.style.backgroundColor = '#e7e7e7';
+  buttonleft.style.backgroundColor = '#e7e7e7';
+  buttonright.style.backgroundColor = '#e7e7e7';
+  buttondown.style.backgroundColor = '#e7e7e7';
+
+  // Your code here.
+  let table = document.getElementById("myTable")
+    var candyCrushes = rules.getCandyCrushes();
+    // console.log(candyCrushes.length);
+    // console.log(candyCrushes[0].length);
+    for(var i = 0;i < candyCrushes.length;i++){
+      for(var j = 0;j < candyCrushes[i].length;j++){
+        var row = candyCrushes[i][j].row;
+        var col = candyCrushes[i][j].col;
+        var trList = table.children;
+        var tableTd = trList[row].children[col];
+        tableTd.style.backgroundColor = "white";
+        tableTd.style.color = "white";
+      }
+    }
+    rules.removeCrushes(candyCrushes, true);
+
+    setTimeout(function (){
+      //等待500ms执行
+      rules.moveCandiesDown();
+
+      document.getElementById('weizhi').disabled = false;
+      document.getElementById('weizhi').focus();
+    //   // 获取 table 元素
+    // let table = document.getElementById("myTable");
+
+    // 清除 table 中的所有内容
+    while (table.firstChild) {
+      table.removeChild(table.firstChild)
+    }
+    creatNewTable2();
+  }, 500);
+
+
+});
+
+
+// keyboard events arrive here键盘事件
+$(document).on('keydown', function(evt) {
+  // Your code here.
+});
+
+
+</script>
+
+
+</head>
+
+<body>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-3" id="firstColumn">
+      <div>
+      <!-- Column 1 Code Here -->   
+      <p class="title" align="center"><b>Candy</b><br> <b>Crush</b></p>
+
+      <input class="btn" id="btn" type="button" value="New Game">
+
+      </div>
+  </div>
+
+    <div class="col-md-6" id="mainColumn">
+
+      <!-- Column 2 Code Here -->
+
+      <table id="myTable" class="table" border="3" width="320" height="320">
+      </table>
+
+
+
+    </div>
+
+    <div class="col-md-3" id="lastColumn">
+
+      <!-- Column 3 Code Here -->
+
+      <label class="MOVE" for="weizhi"><b>Move:</b></label>
+      <input class="Text" type="text" size="2" maxlength="2" id="weizhi" onchange="valid()">
+      <input id="Up" class="Up" type="button" style="background-color: #e7e7e7;" value="↑" onclick="moveCandy('up')" ><br />
+      <input id="Left" class="Left" type="button" style="background-color: #e7e7e7;" value="←" onclick="moveCandy('left')">
+      <input id="Right" class="Right" type="button" style="background-color: #e7e7e7;" value="→" onclick="moveCandy('right')"><br />
+      <input id="Down" class="Down" type="button" style="background-color: #e7e7e7;" value="↓" onclick="moveCandy('down')"><br />
+      <input id="Crush" class="btn2" type="button" value="Crush Once">
+
+    </div>
+  </div> <!-- class="row" -->
+</div> <!-- class="container" -->
+
+</body>
+
+</html>
