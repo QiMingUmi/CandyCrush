@@ -1,0 +1,158 @@
+/* Copyright (c) 2017 MIT 6.813/6.831 course staff, all rights reserved.
+ * Redistribution of original or derived work requires permission of course staff.
+ */
+
+/* REMOVE ME - dashed lines and height for debugging */
+/* Your css code here! */
+
+
+
+.firstColumn {
+  margin-right: 10px; /* 设置第一个列与第二个列之间的间距 */
+}
+
+.candyCrushGrid {
+  flex: 1; /* 使消消乐网格占据剩余的空间 */
+}
+
+.lastColumn {
+  margin-left: 10px; /* 设置最后一个列与第一个列之间的间距 */
+}
+
+/*CandyCrush标题元素*/
+.title{
+  position: absolute;left: 40px; top: 30px;
+  color:red;
+  font-size: 30px;
+  font-weight: 80rem;
+}
+
+/*按钮元素*/
+.btn{
+  position: absolute;left: 0px; top: 130px;
+  background-color: #c8c8c8; /* 灰色背景 */
+  color: black; /* 黑色文字 */
+  padding: 10px 32px; /* 内边距 */
+  text-align: center; /* 文字居中 */
+  text-decoration: none; /* 去除下划线 */
+  display: inline-block; /* 使元素表现为内联块级元素 */
+  font-size: 20px; /* 字体大小 */
+  margin: 4px 2px; /* 外边距 */
+  cursor: pointer; /* 鼠标悬停时显示手型光标 */
+}
+
+/*糖果表格*/
+td {
+  text-align: center; /* 文本居中 */
+  width: 40px; /* 设置单元格宽度 */
+  height: 40px; /* 设置单元格高度 */
+}
+
+/*MOVE字体*/
+.MOVE {
+  position : absolute;
+  left: 20px;
+  top: 0px;
+  font-size: 22px; /* 或者您希望的任何大小 */
+}
+
+/*文本框*/
+.Text {
+  position : absolute;
+  left: 90px;
+  top: 0px;
+  font-size: 22px; /* 或者您希望的任何大小 */
+}
+
+/*向上移动*/
+.Up{
+  position: absolute;
+  left: 80px;
+  top: 50px;
+  background-color: #c8c8c8; /* 灰色背景 */
+color: black; /* 黑色文字 */
+padding: 10px 25px; /* 内边距 */
+text-align: center; /* 文字居中 */
+display: inline-block; /* 使元素表现为内联块级元素 */
+font-size: 20px; /* 字体大小 */
+cursor: pointer; /* 鼠标悬停时显示手型光标 */
+border: none;
+border-radius: 8px;
+}
+
+/*向左移动*/
+.Left{
+  position: absolute;
+  left: 20px;
+  top: 100px;
+  background-color: #c8c8c8; /* 灰色背景 */
+color: black; /* 黑色文字 */
+padding: 10px 20px; /* 内边距 */
+text-align: center; /* 文字居中 */
+display: inline-block; /* 使元素表现为内联块级元素 */
+font-size: 20px; /* 字体大小 */
+cursor: pointer; /* 鼠标悬停时显示手型光标 */
+border: none;
+border-radius: 8px;
+}
+
+/*向右移动*/
+.Right{
+  position: absolute;
+  left: 138px;
+  top: 100px;
+  background-color: #c8c8c8; /* 灰色背景 */
+color: black; /* 黑色文字 */
+padding: 10px 20px; /* 内边距 */
+text-align: center; /* 文字居中 */
+display: inline-block; /* 使元素表现为内联块级元素 */
+font-size: 20px; /* 字体大小 */
+cursor: pointer; /* 鼠标悬停时显示手型光标 */
+border: none;
+border-radius: 8px;
+}
+
+/*向下移动*/
+.Down{
+  position: absolute;
+  left: 80px;
+  top: 150px;
+  background-color: #c8c8c8; /* 灰色背景 */
+color: black; /* 黑色文字 */
+padding: 10px 25px; /* 内边距 */
+text-align: center; /* 文字居中 */
+display: inline-block; /* 使元素表现为内联块级元素 */
+font-size: 20px; /* 字体大小 */
+cursor: pointer; /* 鼠标悬停时显示手型光标 */
+border: none;
+border-radius: 8px;
+}
+
+/*糖果消除*/
+.btn2{
+  position: absolute;
+  left: 20px;
+  top: 200px;
+  background-color: #c8c8c8; /* 灰色背景 */
+color: black; /* 黑色文字 */
+padding: 10px 32px; /* 内边距 */
+text-align: center; /* 文字居中 */
+text-decoration: none; /* 去除下划线 */
+display: inline-block; /* 使元素表现为内联块级元素 */
+font-size: 20px; /* 字体大小 */
+margin: 4px 2px; /* 外边距 */
+cursor: pointer; /* 鼠标悬停时显示手型光标 */
+border: none;
+border-radius: 8px;
+}
+
+.table{
+  width: 320px;
+  height: 320px;
+  border: 3px solid gray;
+  border-collapse: collapse;
+}
+
+.table td{
+  border: 2px solid white;
+}
